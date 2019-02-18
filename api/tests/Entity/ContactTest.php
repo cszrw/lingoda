@@ -15,14 +15,12 @@ class ContactTest extends TestCase
         $TEST_EMAIL = "test@testdomain.test";
         $TEST_SHORT_MESSAGE = "This is a short message";
 
-        /**
-         * Test that we have at least a plain class of the correct name 
-         * and with the correct get set methods
-         */
         $contact = new Contact();
-        $this->assertClassHasAttribute("id", Contact::class);
 
+        $this->assertClassHasAttribute("id", Contact::class);
         $this->assertClassHasAttribute("email", Contact::class);
+        $this->assertClassHasAttribute("message", Contact::class);
+
         $contact->setEmail($TEST_EMAIL);
         $contact->setMessage($TEST_SHORT_MESSAGE);
 
