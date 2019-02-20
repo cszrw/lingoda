@@ -74,6 +74,9 @@ class ContactRepositoryTest extends KernelTestCase
         $this->assertEquals($contact->getMessage(),$this->TEST_MESSAGE_SHORT );
     }
 
+    /**
+     * @expectedException App\Entity\ValidationException
+     */
     public function testRejectsLongMessage()
     {
         $this->assertEquals( 1000, strlen($this->TEST_MESSAGE_MAX));
@@ -93,6 +96,9 @@ class ContactRepositoryTest extends KernelTestCase
         $this->assertCount(0, $contacts);
     }
 
+    /**
+     * @expectedException App\Entity\ValidationException
+     */
     public function testRejectsEmptyEmail()
     {
         // Empty the table
@@ -109,6 +115,9 @@ class ContactRepositoryTest extends KernelTestCase
         $this->assertCount(0, $contacts);
     }
 
+    /**
+     * @expectedException App\Entity\ValidationException
+     */
     public function testRejectsEmptyMessage()
     {
         // Empty the table
