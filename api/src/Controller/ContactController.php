@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use App\Serializer\FormErrorSerializer;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -23,12 +24,19 @@ class ContactController extends FOSRestController
      */
     private $entityManager;
 
+    /**
+    * @var FormErrorSerializer
+    */
+    private $formErrorSerializer;
+
     public function __construct(
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        FormErrorSerializer $formErrorSerializer
+
     ) {
         $this->entityManager = $entityManager;
+        $this->formErrorSerializer = $formErrorSerializer;
     }
-
 
   /**
    * Lists all Contacts.
@@ -59,7 +67,9 @@ class ContactController extends FOSRestController
       return new JsonResponse(
           [
               'status' => 'error',
-          ]
+              'errors' => $this->formErrorSerializer->convertFormToArray($form),
+          ],
+         JsonResponse::HTTP_BAD_REQUEST
       );
     }
     $this->entityManager->persist($form->getData());

@@ -34,7 +34,7 @@ class FeatureContext implements Context
      * @BeforeSCenario
      */
     public function cleanUpDatabase(){
-        $host = '0.0.0.0';
+        $host = '127.0.0.1';
         $db = 'lingoda_contact_test';
         $port = '3336';
         $user = "lingoda";
@@ -62,7 +62,7 @@ class FeatureContext implements Context
                 json_encode($contact)
             );
             $this->apiContext->requestPath(
-                "/contacts",
+                "/contact",
                 "POST");
         }
     }
