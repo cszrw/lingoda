@@ -79,7 +79,6 @@ class Contact{
      * @ORM\PrePersist @ORM\PreUpdate
      */
     public function validate(){
-        print("Validate called");
         $validator = Validation::createValidatorBuilder()
             ->enableAnnotationMapping()
             ->getValidator();

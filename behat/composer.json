@@ -1,0 +1,9 @@
+{
+    "name": "lingoda/apitest",
+    "description": "rest spec",
+    "type": "project",
+    "require": {
+        "behat/behat": "^3.5",
+        "imbo/behat-api-extension": "^2.1"
+    }
+}
