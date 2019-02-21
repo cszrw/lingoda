@@ -2,8 +2,6 @@
 
 namespace App\Serializer;
 
-// src/Serializer/FormErrorSerializer.php
-
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Translation\TranslatorInterface;
