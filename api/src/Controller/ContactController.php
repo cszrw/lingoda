@@ -6,8 +6,10 @@ use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Entity\Contact;
 use App\Form\ContactType;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Contact controller.
@@ -17,8 +19,20 @@ class ContactController extends FOSRestController
 {
 
   /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
+    public function __construct(
+        EntityManagerInterface $entityManager
+    ) {
+        $this->entityManager = $entityManager;
+    }
+
+
+  /**
    * Lists all Contacts.
-   * @Rest\Get("/contacts")
+   * @Rest\Get("/contact")
    *
    * @return Response
    */
@@ -26,29 +40,50 @@ class ContactController extends FOSRestController
   {
     $repository = $this->getDoctrine()->getRepository(Contact::class);
     $contacts = $repository->findall();
-    return $this->handleView($this->view($contacts));
+    return new JsonResponse(json_encode($contacts), JsonResponse::HTTP_OK);
   }
 
   /**
    * Create Contact.
    * @Rest\Post("/contact")
-   *
+   * @Route("/contact", name="post_contact", methods={"POST"})
    * @return Response
    */
   public function postContactAction(Request $request)
   {
-    $contact = new Contact();
-    $form = $this->createForm(ContactType::class, $contact);
+
     $data = json_decode($request->getContent(), true);
+    $form = $this->createForm(ContactType::class, new Contact());
     $form->submit($data);
-    if ($form->isSubmitted() && $form->isValid()) {
-      $em = $this->getDoctrine()->getManager();
-      $em->persist($contact);
-      $em->flush();
-      return $this->handleView($this->view(['status' => 'ok'], Response::HTTP_CREATED));
+    if (false === $form->isValid()) {
+      return new JsonResponse(
+          [
+              'status' => 'error',
+          ]
+      );
     }
-    return $this->handleView($this->view($form->getErrors()));
-  }
+    $this->entityManager->persist($form->getData());
+    $this->entityManager->flush();
+
+    return new JsonResponse(
+        [
+            'status' => 'ok',
+        ],
+        JsonResponse::HTTP_CREATED
+    );
+
+    // $contact = new Contact();
+    // $form = $this->createForm(ContactType::class, $contact);
+    // $data = json_decode($request->getContent(), true);
+    // $form->submit($data);
+    // if ($form->isSubmitted() && $form->isValid()) {
+    //   $em = $this->getDoctrine()->getManager();
+    //   $em->persist($contact);
+    //   $em->flush();
+    //   return $this->handleView($this->view(['status' => 'ok'], Response::HTTP_CREATED));
+    // }
+    // return $this->handleView($this->view($form->getErrors()));
+    }
 }
 
 // namespace App\Controller;
