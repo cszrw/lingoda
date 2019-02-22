@@ -17,16 +17,16 @@ class ContactPage extends React.Component {
         body: JSON.stringify(contact)
       }).then(function(response) {
         // things we could do here:
-        // Put the last contact item into state
+        // Put the latest contact item into state
         // Report remote errors
-        // Confirm success to the user
+        
         if(response.ok) {
-            
+            alert("You message has been sent");
             return
         }
         throw new Error('Network response was not ok.');
       }).catch(function(error) {
-        console.log('Problem with fetch operation: ', error.message);
+        alert('Could not find the service. Message not sent: ', error.message);
       });  
   }
   render() {

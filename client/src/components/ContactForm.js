@@ -1,9 +1,15 @@
 
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
+import { reset, Field, reduxForm } from 'redux-form'
 import TextField from 'material-ui/TextField'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
+
+const afterSubmit = (result, dispatch) => {
+  
+  dispatch(reset('ContactForm'));
+}
+  
 const validate = values => {
   const errors = {}
   const requiredFields = [
@@ -72,6 +78,7 @@ const ContactForm = props => {
 }
 
 export default reduxForm({
+  onSubmitSuccess: afterSubmit,
   form: 'ContactForm',
   validate
 })(ContactForm)
