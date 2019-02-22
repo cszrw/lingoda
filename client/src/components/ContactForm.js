@@ -49,7 +49,7 @@ const ContactForm = props => {
   const { handleSubmit, pristine, reset, submitting } = props
   return (
     <MuiThemeProvider>
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="container">
       
       <div>
         <Field name="email" component={renderTextField} label="Email" />
