@@ -38,19 +38,6 @@ class ContactController extends FOSRestController
         $this->formErrorSerializer = $formErrorSerializer;
     }
 
-  // /**
-  //  * Lists all Contacts.
-  //  * @Rest\Get("/contact")
-  //  *
-  //  * @return Response
-  //  */
-  // public function getContactAction()
-  // {
-  //   $repository = $this->getDoctrine()->getRepository(Contact::class);
-  //   $contacts = $repository->findall();
-  //   return new JsonResponse(json_encode($contacts), JsonResponse::HTTP_OK);
-  // }
-
   /**
    * Create Contact.
    * @Rest\Post("/contact")
@@ -59,7 +46,6 @@ class ContactController extends FOSRestController
    */
   public function postContactAction(Request $request)
   {
-    
     $data = json_decode($request->getContent(), true);
     $form = $this->createForm(ContactType::class, new Contact());
     $form->submit($data);

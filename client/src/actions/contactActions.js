@@ -17,7 +17,6 @@ export const createContact = contactData => disp => {
     );
 };
 
-
 export const fetchContacts = () => dispatch => {
   fetch('http://localhost:8000/api/contact')
     .then(res => res.json()

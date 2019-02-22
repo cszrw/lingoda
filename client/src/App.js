@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import ContactForm from './components/ContactForm';
-import './App.css';
+import ContactPage from './components/ContactPage';
 import { Provider}  from 'react-redux';
 import store from './store';
 
@@ -10,7 +9,7 @@ class App extends Component {
     return (
       <Provider store={store}>
       <div className="App">
-        <ContactForm/>
+        <ContactPage/>
       </div>
       </Provider>
     );

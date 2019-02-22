@@ -1,62 +1,77 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { createContact } from '../actions/contactActions';
 
-class ContactForm extends Component {
+import React from 'react'
+import { Field, reduxForm } from 'redux-form'
+import TextField from 'material-ui/TextField'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-  constructor(props){
-    super(props)
-    this.state = {
-        email:'',
-        message:''
+const validate = values => {
+  const errors = {}
+  const requiredFields = [
+    'email',
+    'message'
+  ]
+  requiredFields.forEach(field => {
+    if (!values[field]) {
+      errors[field] = 'Required'
     }
-    this.onChange = this.onChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
+  })
+  if (
+    values.email &&
+    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
+  ) {
+    errors.email = 'Invalid email address'
   }
-
-  onChange(e){
-    this.setState({[e.target.name]: e.target.value})
-  }
-
-  onSubmit(e){
-    e.preventDefault()
-    const contact = {
-        email:this.state.email,
-        message:this.state.message
-    }
-    this.props.createContact(contact);
-  }
-
-  render() {
-    return (
-      <div>
-        <h1>Contact Us</h1>
-     
-        <form onSubmit={this.onSubmit}>
-          <div>
-            <label>E-mail:</label>
-            <input name="email" type="email"
-             value={this.state.email}
-             onChange={this.onChange} />
-          </div>
-          <br/>
-          <div>
-            <label>Message:</label>
-            <textarea name="message" 
-              value={this.state.message}
-              onChange={this.onChange} />
-          </div>
-          <br/>
-          <button type="submit">Submit</button>
-        </form>
-      </div>
-    )
-  }
+  return errors
 }
 
-ContactForm.propTypes = {
-  createContact: PropTypes.func.isRequired
-};
-export default connect(null, { createContact })(ContactForm);
+const renderTextField = ({
+  input,
+  label,
+  meta: { touched, error },
+  ...custom
+}) => (
+  <TextField
+    hintText={label}
+    floatingLabelText={label}
+    errorText={touched && error}
+    {...input}
+    {...custom}
+  />
+)
 
+const ContactForm = props => {
+  const { handleSubmit, pristine, reset, submitting } = props
+  return (
+    <MuiThemeProvider>
+    <form onSubmit={handleSubmit}>
+      
+      <div>
+        <Field name="email" component={renderTextField} label="Email" />
+      </div>
+     
+      <div>
+        <Field
+          name="message"
+          component={renderTextField}
+          label="Message"
+          multiLine={true}
+          rows={10}
+        />
+      </div>
+      <div>
+        <button type="submit" disabled={pristine || submitting}>
+          Submit
+        </button>
+        <button type="button" disabled={pristine || submitting} onClick={reset}>
+          Clear Values
+        </button>
+      </div>
+    </form>
+    </MuiThemeProvider>
+  )
+}
+
+export default reduxForm({
+  form: 'ContactForm',
+  validate
+})(ContactForm)
